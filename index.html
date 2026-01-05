@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anya Fast Food</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Swiper -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+<!-- Alertify -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/material.min.css"/>
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<style>
+:root{
+--p:#6750a4;--onp:#fff;--s:#fffbfe;--sv:#e7e0ec;--ons:#1c1b1f;--o:#cac4d0;
+}
+[data-theme="dark"]{
+--p:#d0bcff;--onp:#381e72;--s:#1c1b1f;--sv:#49454f;--ons:#e6e1e5;--o:#938f99;
+}
+body{
+background:var(--s);
+color:var(--ons);
+font-family:system-ui,Roboto;
+padding-bottom:90px;
+}
+
+/* APP BAR */
+.md-appbar{
+background:var(--p);
+color:var(--onp);
+padding:16px;
+border-radius:0 0 28px 28px;
+}
+
+/* SEARCH */
+.md-search{
+background:var(--sv);
+border:none;
+border-radius:28px;
+padding:14px 20px;
+}
+
+/* MATERIAL 3 PILL CATEGORY */
+.md-chip{
+  background:var(--sv);
+  color:var(--ons);
+  border-radius:999px;           /* pill shape */
+  padding:6px 12px;              /* compact */
+  min-width:auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .2s ease;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+
+/* Icon size */
+.md-chip .material-icons{
+  font-size:18px;
+}
+
+/* Active pill */
+.md-chip.active{
+  background:var(--p);
+  color:var(--onp);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.swiper{
+  padding:4px 0;
+}
+
+.swiper-slide{
+  width:auto !important;   /* required for pill style */
+}
+/* CARD */
+.md-card{
+background:var(--s);
+border-radius:24px;
+padding:12px;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
+cursor:pointer;
+}
+.md-product-img{
+height:140px;
+object-fit:cover;
+border-radius:20px;
+}
+
+/* FOOTER */
+.md-footer{
+position:fixed;
+bottom:0;
+width:100%;
+background:var(--s);
+border-top:1px solid var(--o);
+}
+.md-footer-item{
+text-align:center;
+font-size:12px;
+cursor:pointer;
+}
+.md-footer-item .material-icons{
+display:block;
+font-size:24px;
+}
+.md-footer-item.active{
+color:var(--p);
+font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<!-- APP BAR -->
+<div class="md-appbar d-flex justify-content-between align-items-center">
+  <h6 id="appTitle"></h6>
+  <div class="d-flex gap-2">
+    <button class="btn btn-sm text-white" onclick="toggleTheme()">
+      <span class="material-icons" id="themeIcon">dark_mode</span>
+    </button>
+    <select id="langSelect" class="form-select form-select-sm w-auto">
+      <option value="en">English</option>
+      <option value="ku">کوردی</option>
+      <option value="ar">العربیة</option>
+      <option value="fa">فارسی</option>
+    </select>
+  </div>
+</div>
+
+<div class="container mt-3">
+
+  <!-- SEARCH -->
+  <input id="search" class="form-control md-search mb-3">
+
+  <!-- MENU PAGE -->
+  <div id="menuPage">
+
+    <!-- CATEGORY SWIPER -->
+    <div class="swiper mb-3">
+      <div class="swiper-wrapper" id="categoryList"></div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="row" id="productList"></div>
+  </div>
+
+  <!-- FEEDBACK PAGE -->
+  <div id="feedbackPage" class="d-none">
+    <div class="md-card">
+      <h6 id="feedbackTitle"></h6>
+      <textarea class="form-control mb-2"></textarea>
+      <button class="btn w-100 text-white" style="background:var(--p)" id="sendBtn"></button>
+      
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <hr>
+    <center>
+      <h5>Powered by Sahand Tariq 2026</h5>
+      </center>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="md-footer py-2">
+  <div class="container">
+    <div class="row">
+      <div class="col md-footer-item active" onclick="switchTab('menu',this)">
+        <span class="material-icons">restaurant</span>
+        <span id="menuLabel"></span>
+      </div>
+      <div class="col md-footer-item" onclick="switchTab('feedback',this)">
+        <span class="material-icons">rate_review</span>
+        <span id="feedbackLabel"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+<script>
+let lang="en",currentCat="all",searchText="";
+
+const LANG={
+en:{dir:"ltr",title:"Anya Fast Food",menu:"Menu",feedback:"Feedback",search:"Search food...",send:"Send",currency:"IQD",
+categories:[
+{id:"all",icon:"restaurant",name:"All"},
+{id:"burger",icon:"lunch_dining",name:"Burger"},
+{id:"pizza",icon:"local_pizza",name:"Pizza"},
+{id:"fries",icon:"fastfood",name:"Fries"}],
+products:[
+{id:1,cat:"burger",name:"Burger",price:2500,about:"Delicious beef burger",img:"img/burger.png"},
+{id:2,cat:"pizza",name:"Pizza",price:5000,about:"Cheese pizza",img:"img/pizza.png"},
+{id:3,cat:"fries",name:"Fries",price:2000,about:"Crispy fries",img:"img/fries.png"}]
+},
+ku:{dir:"rtl",title:"خواردەمەنی ئانیا",menu:"خواردن",feedback:"ڕاوێژ",search:"گەڕان...",send:"ناردن",currency:"دینار",
+categories:[
+{id:"all",icon:"restaurant",name:"هەموو"},
+{id:"burger",icon:"lunch_dining",name:"بەرگەر"},
+{id:"pizza",icon:"local_pizza",name:"پیتزا"},
+{id:"fries",icon:"fastfood",name:"فرایز"}],
+products:[
+{id:1,cat:"burger",name:"بەرگەر",price:2500,about:"بەرگەری گۆشت",img:"img/burger.png"},
+{id:2,cat:"pizza",name:"پیتزا",price:5000,about:"پیتزای پەنیر",img:"img/pizza.png"},
+{id:3,cat:"fries",name:"فرایز",price:2000,about:"فرایزی سوور",img:"img/fries.png"}]
+},
+ar:{dir:"rtl",title:"الوجبات السريعة انیا",menu:"القائمة",feedback:"ملاحظات",search:"بحث...",send:"إرسال",currency:"دينار",
+categories:[
+{id:"all",icon:"restaurant",name:"الكل"},
+{id:"burger",icon:"lunch_dining",name:"برغر"},
+{id:"pizza",icon:"local_pizza",name:"بيتزا"},
+{id:"fries",icon:"fastfood",name:"بطاطس"}],
+products:[
+{id:1,cat:"burger",name:"برغر",price:2500,about:"برغر لحم شهي",img:"img/burger.png"},
+{id:2,cat:"pizza",name:"بيتزا",price:5000,about:"بيتزا بالجبن",img:"img/pizza.png"},
+{id:3,cat:"fries",name:"بطاطس",price:2000,about:"بطاطس مقرمشة",img:"img/fries.png"}]
+},
+fa:{dir:"rtl",title:"فست فود ئانیا",menu:"منو",feedback:"بازخورد",search:"جستجو...",send:"ارسال",currency:"دینار",
+categories:[
+{id:"all",icon:"restaurant",name:"همه"},
+{id:"burger",icon:"lunch_dining",name:"برگر"},
+{id:"pizza",icon:"local_pizza",name:"پیتزا"},
+{id:"fries",icon:"fastfood",name:"سیب‌زمینی"}],
+products:[
+{id:1,cat:"burger",name:"برگر",price:2500,about:"برگر گوشت خوشمزه",img:"img/burger.png"},
+{id:2,cat:"pizza",name:"پیتزا",price:5000,about:"پیتزا پنیری",img:"img/pizza.png"},
+{id:3,cat:"fries",name:"سیب‌زمینی",price:2000,about:"سیب‌زمینی ترد",img:"img/fries.png"}]
+}
+};
+
+function render(){
+const L=LANG[lang];
+document.body.dir=L.dir;
+appTitle.innerText=L.title;
+menuLabel.innerText=L.menu;
+feedbackLabel.innerText=L.feedback;
+feedbackTitle.innerText=L.feedback;
+sendBtn.innerText=L.send;
+search.placeholder=L.search;
+
+categoryList.innerHTML="";
+L.categories.forEach(c=>{
+categoryList.innerHTML+=`
+<div class="swiper-slide md-chip ${c.id===currentCat?'active':''}"
+onclick="setCategory('${c.id}',this)">
+<span class="material-icons">${c.icon}</span>
+<div>${c.name}</div>
+</div>`;});
+
+showProducts();
+new Swiper('.swiper',{slidesPerView:'auto',spaceBetween:12});
+}
+
+function showProducts(){
+productList.innerHTML="";
+LANG[lang].products
+.filter(p=>(currentCat==="all"||p.cat===currentCat)&&p.name.toLowerCase().includes(searchText))
+.forEach(p=>{
+productList.innerHTML+=`
+<div class="col-6 mb-3">
+<div class="md-card" onclick="info(${p.id})">
+<img src="${p.img}" class="md-product-img w-100">
+<h6 class="mt-2">${p.name}</h6>
+<b>${p.price.toLocaleString()} ${LANG[lang].currency}</b>
+</div></div>`;});
+}
+
+function info(id){
+const p=LANG[lang].products.find(x=>x.id===id);
+alertify.alert(p.name,`
+<img src="${p.img}" class="img-fluid mb-2">
+<p>${p.about}</p>
+<b>${p.price.toLocaleString()} ${LANG[lang].currency}</b>`);
+}
+
+function setCategory(id,el){
+currentCat=id;
+document.querySelectorAll('.md-chip').forEach(c=>c.classList.remove('active'));
+el.classList.add('active');
+showProducts();
+}
+
+search.oninput=e=>{
+searchText=e.target.value.toLowerCase();
+showProducts();
+};
+
+langSelect.onchange=e=>{lang=e.target.value;render();};
+
+function switchTab(tab,el){
+menuPage.classList.toggle("d-none",tab!=="menu");
+feedbackPage.classList.toggle("d-none",tab!=="feedback");
+document.querySelectorAll('.md-footer-item').forEach(i=>i.classList.remove('active'));
+el.classList.add('active');
+}
+
+function toggleTheme(){
+const h=document.documentElement;
+h.toggleAttribute("data-theme","dark");
+themeIcon.innerText=h.hasAttribute("data-theme")?"light_mode":"dark_mode";
+}
+
+render();
+</script>
+</body>
+</html>
